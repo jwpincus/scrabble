@@ -20,7 +20,7 @@ class Scrabble
     }
   end
 
-  def score_with_multipliers(word, letter_multiplier, word_multiplier = 1)
+  def score_with_multipliers(word, letter_multiplier = Array.new(word.length, 1), word_multiplier = 1)
     letter_score = word.split("").map do |letter|
       point_values[letter.upcase]
     end
@@ -31,6 +31,20 @@ class Scrabble
     total_score << 10 if word.length == 7
     total_score = (total_score.reduce(:+) * word_multiplier)
     total_score 
-    # binding.pry
+  end
+
+  def highest_scoring_word(words)
+    scored_words = words.map do |word|
+      [score_with_multipliers(word), word]
+    end
+    sorted_scores = scored_words.sort_by do |word|
+      word[0]
+    end
+    
+    if sorted_scores[-2][0] == sorted_scores.last[0]
+      sorted_scores[-2][1].length > sorted_scores.last[1].length ? sorted_scores.last[1] : sorted_scores[-2][1]
+    else 
+      sorted_scores.last[1]
+    end
   end
 end
