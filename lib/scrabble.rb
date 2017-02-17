@@ -1,3 +1,5 @@
+require 'pry-state'
+
 class Scrabble
 
   def score(word)
@@ -16,5 +18,19 @@ class Scrabble
       "U"=>1, "V"=>4, "W"=>4, "X"=>8,
       "Y"=>4, "Z"=>10
     }
+  end
+
+  def score_with_multipliers(word, letter_multiplier, word_multiplier = 1)
+    letter_score = word.split("").map do |letter|
+      point_values[letter.upcase]
+    end
+    total_score = []
+    letter_score.each_with_index do |score, idx|
+      total_score << (score * letter_multiplier[idx])
+    end
+    total_score << 10 if word.length == 7
+    total_score = (total_score.reduce(:+) * word_multiplier)
+    total_score 
+    # binding.pry
   end
 end
